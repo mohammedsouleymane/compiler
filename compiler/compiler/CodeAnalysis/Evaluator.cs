@@ -18,8 +18,8 @@ public class Evaluator
     {
         switch (node)
         {
-            case NumberExpressionSyntax n:
-                return (int) n.NumberToken.Value;
+            case LiteralExpressionSyntax n:
+                return (int) n.LiteralToken.Value;
             case BinaryExpressionSyntax b:
             {
                 var left = EvaluateExpression(b.Left);

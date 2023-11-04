@@ -32,7 +32,7 @@ while (true)
     if (syntaxTree.Diagnostics.Any())
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
-        foreach (var diagnostic in syntaxTree.Diagnostics)
+        foreach (var diagnostic in syntaxTree.Diagnostics) 
             Console.WriteLine(diagnostic);
         Console.ResetColor();
     }
@@ -56,7 +56,7 @@ static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
     
 
     Console.WriteLine();
-    indent += isLast ? "    ": "│   ";
+    indent += isLast ? "   ": "│   ";
     
     var lastChild = node.GetChildren().LastOrDefault();
     foreach (var child in node.GetChildren())

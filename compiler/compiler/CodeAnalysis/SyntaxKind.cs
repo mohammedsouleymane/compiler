@@ -3,16 +3,19 @@ namespace compiler.CodeAnalysis;
 
 public enum SyntaxKind
 {
-    NumberToken,
-    WhitespaceToken,
-    PlusToken,
-    MinusToken,
-    CloseParenthesisToken,
-    OpenParenthesisToken,
-    StarToken,
-    SlashToken,
+    //Tokens
     BadToken,
     EndOfFileToken,
+    WhitespaceToken,
+    NumberToken,
+    PlusToken,
+    MinusToken,
+    StarToken,
+    SlashToken,
+    OpenParenthesisToken,
+    CloseParenthesisToken,
+   
+    //Expressions
     NumberExpression,
     BinaryExpression,
     ParenthesizedExpression
