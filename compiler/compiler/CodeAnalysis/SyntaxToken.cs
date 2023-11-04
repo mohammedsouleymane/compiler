@@ -9,9 +9,9 @@ public sealed class SyntaxToken : SyntaxNode
     }
 
     public int Position { get; set; }
-    public string Text { get; set; }
+    public string? Text { get; set; }
     public object? Value { get; set; }
-    public SyntaxToken(SyntaxKind kind, int position, string text, object? value)
+    public SyntaxToken(SyntaxKind kind, int position, string? text, object? value)
     {
         Kind = kind;
         Position = position;
