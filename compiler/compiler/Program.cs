@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using compiler.CodeAnalysis;
+using compiler.CodeAnalysis.Binding;
 using compiler.CodeAnalysis.Syntax;
 
 var showTree = false;
@@ -26,6 +27,9 @@ while (true)
     }
         
     var syntaxTree = SyntaxTree.Parse(line);
+    var binder = new Binder();
+    var boundExpression = binder.BindExpression(syntaxTree.Root);
+    var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
     if (showTree)
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -33,18 +37,18 @@ while (true)
         Console.ResetColor();
     }
     
-    if (syntaxTree.Diagnostics.Any())
+    if (!diagnostics.Any())
+    {
+        var e = new Evaluator(boundExpression);
+        var result = e.Evaluate();
+        Console.WriteLine(result);
+    }
+    else
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
         foreach (var diagnostic in syntaxTree.Diagnostics) 
             Console.WriteLine(diagnostic);
         Console.ResetColor();
-    }
-    else
-    {
-        var e = new Evaluator(syntaxTree.Root);
-        var result = e.Evaluate();
-        Console.WriteLine(result);
     }
 }
 
