@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using compiler.CodeAnalysis;
+using compiler.CodeAnalysis.Syntax;
 
 var showTree = false;
 while (true)
