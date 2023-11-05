@@ -19,6 +19,9 @@ while (true)
         case "clear" or "cls":
             Console.Clear();
             continue;
+        // case "exit":
+        //     Environment.Exit(0);
+        //     break;
     }
         
     var syntaxTree = SyntaxTree.Parse(line);
