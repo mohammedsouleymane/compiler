@@ -12,20 +12,20 @@ internal sealed class Evaluator
         _root = root;
     }
 
-    public int Evaluate()
+    public object Evaluate()
     {
         return EvaluateExpression(_root);
     }
 
-    private int EvaluateExpression(BoundExpression node)
+    private object EvaluateExpression(BoundExpression node)
     {
         switch (node)
         {
             case BoundLiteralExpression n:
-                return (int) n.Value;
+                return  n.Value;
             case BoundUnaryExpression u:
             {
-                var operand = EvaluateExpression(u.Operand);
+                var operand = (int)EvaluateExpression(u.Operand);
                 return u.OperatorKind switch
                 {
                     BoundUnaryOperatorKind.Negation => -operand,
@@ -35,15 +35,15 @@ internal sealed class Evaluator
             }
             case BoundBinaryExpression b:
             {
-                var left = EvaluateExpression(b.Left);
-                var right = EvaluateExpression(b.Right);
+                var left = (int) EvaluateExpression(b.Left);
+                var right =(int) EvaluateExpression(b.Right);
                 return b.OperatorKind switch
                 {
                     BoundBinaryOperatorKind.Addition => left + right,
                     BoundBinaryOperatorKind.Subtraction => left - right,
                     BoundBinaryOperatorKind.Multiplication => left * right,
                     BoundBinaryOperatorKind.Division => left / right,
-                    _ => throw new Exception($"Unexpecte binary operator {b.OperatorKind}")
+                    _ => throw new Exception($"Unexpected binary operator {b.OperatorKind}")
                 };
             }
             default:
