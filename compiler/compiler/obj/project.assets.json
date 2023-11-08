@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {}
+    "net7.0": {
+      "Gee/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Gee.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Gee.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Gee/1.0.0": {
+      "type": "project",
+      "path": "../Gee/Gee.csproj",
+      "msbuildProject": "../Gee/Gee.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net7.0": []
+    "net7.0": [
+      "Gee >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Moham\\.nuget\\packages\\": {},
@@ -38,7 +57,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Documents\\Compiler\\compiler\\Gee\\Gee.csproj": {
+              "projectPath": "D:\\Documents\\Compiler\\compiler\\Gee\\Gee.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

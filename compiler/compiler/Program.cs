@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using compiler.CodeAnalysis;
-using compiler.CodeAnalysis.Binding;
-using compiler.CodeAnalysis.Syntax;
+using Gee.CodeAnalysis;
+using Gee.CodeAnalysis.Syntax;
 
 var showTree = false;
 while (true)
@@ -21,15 +20,13 @@ while (true)
         case "clear" or "cls":
             Console.Clear();
             continue;
-        // case "exit":
-        //     Environment.Exit(0);
-        //     break;
     }
         
     var syntaxTree = SyntaxTree.Parse(line);
-    var binder = new Binder();
-    var boundExpression = binder.BindExpression(syntaxTree.Root);
-    var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
+    var compilation = new Compilation(syntaxTree);
+    var result = compilation.Evaluate();
+
+    var diagnostics = result.Diagnostics;
     if (showTree)
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -39,16 +36,31 @@ while (true)
     
     if (!diagnostics.Any())
     {
-        var e = new Evaluator(boundExpression);
-        var result = e.Evaluate();
-        Console.WriteLine(result);
+        Console.WriteLine(result.Value);
     }
     else
     {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-        foreach (var diagnostic in diagnostics) 
+        foreach (var diagnostic in diagnostics)
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(diagnostic);
-        Console.ResetColor();
+            Console.ResetColor();
+            
+            var prefix = line[..diagnostic.Span.Start];
+            var error = line[diagnostic.Span.Start..diagnostic.Span.End];
+            var suffix = line[diagnostic.Span.End..];
+            
+            Console.Write("    "+prefix);
+            
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(error);
+            Console.ResetColor();
+
+            Console.Write(suffix);
+            Console.WriteLine();
+        }
+        
     }
 }
 
@@ -64,7 +76,7 @@ static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
     
 
     Console.WriteLine();
-    indent += isLast ? "   ": "│   ";
+    indent += isLast ? "   ": "│  ";
     
     var lastChild = node.GetChildren().LastOrDefault();
     foreach (var child in node.GetChildren())

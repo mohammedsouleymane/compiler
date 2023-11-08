@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Gee\Gee.csproj" />
+    </ItemGroup>
+
 
 
 
