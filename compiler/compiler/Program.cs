@@ -1,9 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Gee.CodeAnalysis;
+﻿using Gee.CodeAnalysis;
 using Gee.CodeAnalysis.Syntax;
 
 var showTree = false;
+var variables = new Dictionary<VariableSymbol, object>();
 while (true)
 {
     Console.Write("> ");
@@ -21,10 +20,10 @@ while (true)
             Console.Clear();
             continue;
     }
-        
+
     var syntaxTree = SyntaxTree.Parse(line);
     var compilation = new Compilation(syntaxTree);
-    var result = compilation.Evaluate();
+    var result = compilation.Evaluate(variables);
 
     var diagnostics = result.Diagnostics;
     if (showTree)
@@ -33,11 +32,9 @@ while (true)
         PrettyPrint(syntaxTree.Root);
         Console.ResetColor();
     }
-    
+
     if (!diagnostics.Any())
-    {
         Console.WriteLine(result.Value);
-    }
     else
     {
         foreach (var diagnostic in diagnostics)
@@ -46,13 +43,13 @@ while (true)
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(diagnostic);
             Console.ResetColor();
-            
+
             var prefix = line[..diagnostic.Span.Start];
             var error = line[diagnostic.Span.Start..diagnostic.Span.End];
             var suffix = line[diagnostic.Span.End..];
-            
-            Console.Write("    "+prefix);
-            
+
+            Console.Write("    " + prefix);
+
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(error);
             Console.ResetColor();
@@ -60,7 +57,6 @@ while (true)
             Console.Write(suffix);
             Console.WriteLine();
         }
-        
     }
 }
 
@@ -70,14 +66,14 @@ static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
     Console.Write(indent);
     Console.Write(marker);
     Console.Write(node.Kind);
-    
+
     if (node is SyntaxToken { Value: not null } t)
         Console.Write($" {t.Value}");
-    
+
 
     Console.WriteLine();
-    indent += isLast ? "   ": "│  ";
-    
+    indent += isLast ? "   " : "│  ";
+
     var lastChild = node.GetChildren().LastOrDefault();
     foreach (var child in node.GetChildren())
         PrettyPrint(child, indent, child == lastChild);

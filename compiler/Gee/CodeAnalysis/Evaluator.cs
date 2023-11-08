@@ -5,10 +5,12 @@ namespace Gee.CodeAnalysis;
 internal sealed class Evaluator
 {
     private readonly BoundExpression _root;
+    private readonly Dictionary<VariableSymbol, object> _variables;
 
-    public Evaluator(BoundExpression root)
+    public Evaluator(BoundExpression root, Dictionary<VariableSymbol, object> variables)
     {
         _root = root;
+        _variables = variables;
     }
 
     public object Evaluate()
@@ -22,6 +24,15 @@ internal sealed class Evaluator
         {
             case BoundLiteralExpression n:
                 return  n.Value;
+            case BoundVariableExpression v:
+                return _variables[v.Variable];
+            case BoundAssigmentExpression a:
+            {
+                var value = EvaluateExpression(a.Expression);
+                _variables[a.Variable] = value;
+                return value;
+            }
+
             case BoundUnaryExpression u:
             {
                 var operand = EvaluateExpression(u.Operand);
